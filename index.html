@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Text To speech</title>
+    <link rel="stylesheet"href="style.css">
+</head>
+<body>
+    <div id="container">
+        <h1>Text To speech</h1>
+        <textarea id="textTospeak"></textarea>
+        <button onclick="speak()">Text To Speak</button>
+    </div>
+    <script>
+         function speak(){
+            var speech = new SpeechSynthesisUtterance();
+            var voices = window.speechSynthesis.getVoices();
+            var femaleVoice = voices.find(voice => voice.name.includes("female") || voice.name.includes("Female"));
+
+            // Set a fallback if a specific female voice is not found
+            if (!femaleVoice) {
+                femaleVoice = voices.find(voice => voice.name.includes("Google US English")) || voices[0];
+            }
+
+            speech.voice = femaleVoice;
+            speech.text = document.getElementById('textTospeak').value;
+            speech.rate = 1;
+            speech.volume = 1;  // Corrected volume to be between 0 and 1
+            speech.pitch = 1;
+            window.speechSynthesis.speak(speech);
+        }
+
+        // Ensure voices are loaded before trying to use them
+        window.speechSynthesis.onvoiceschanged = function() {
+            // You can add any initialization code here if needed
+        };
+    </script>
+</body>
+</html>
